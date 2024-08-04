@@ -90,6 +90,7 @@ private[redis] object RedisConnection {
     ssl: Boolean
   ): ZIO[Scope, RedisError.IOError, RedisConnection] =
     (for {
+      _           <- ZIO.logDebug(s"zio-redis is connecting to $address")
       address     <- ZIO.succeed(address)
       makeBuffer   = ZIO.succeed(ByteBuffer.allocateDirect(ResponseBufferSize))
       readBuffer  <- makeBuffer
@@ -120,6 +121,7 @@ private[redis] object RedisConnection {
   private def openChannel(address: SocketAddress): ZIO[Scope, IOException, AsynchronousSocketChannel] =
     ZIO.fromAutoCloseable {
       for {
+        _ <- ZIO.logInfo(s"opening channel with redis at $address")
         channel <- ZIO.attempt {
                      val channel = AsynchronousSocketChannel.open()
                      channel.setOption(StandardSocketOptions.SO_KEEPALIVE, Boolean.box(true))

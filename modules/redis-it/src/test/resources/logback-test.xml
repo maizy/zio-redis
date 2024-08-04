@@ -1,0 +1,16 @@
+<configuration>
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <pattern>%gray(%d{HH:mm:ss.SSS}) %highlight(%.-1level) %green(%thread) [%cyan(%logger) %kvp]: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+  <logger name="com.github.dockerjava" level="INFO"/>
+  <logger name="org.testcontainers" level="DEBUG"/>
+
+  <root level="TRACE">
+    <appender-ref ref="CONSOLE" />
+  </root>
+</configuration>

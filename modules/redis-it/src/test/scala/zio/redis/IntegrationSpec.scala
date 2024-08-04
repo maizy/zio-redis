@@ -4,7 +4,7 @@ import com.dimafeng.testcontainers.{DockerComposeContainer, ExposedService}
 import org.testcontainers.containers.wait.strategy.Wait
 import zio.schema.Schema
 import zio.schema.codec.{BinaryCodec, ProtobufCodec}
-import zio.test.TestAspect.{fibers, silentLogging, tag}
+import zio.test.TestAspect.{debug, fibers, tag}
 import zio.test._
 import zio.testcontainers._
 import zio.{ULayer, _}
@@ -16,7 +16,7 @@ trait IntegrationSpec extends ZIOSpecDefault {
   implicit def summonCodec[A: Schema]: BinaryCodec[A] = ProtobufCodec.protobufCodec
 
   override def aspects: Chunk[TestAspectAtLeastR[Live]] =
-    Chunk(fibers, silentLogging)
+    Chunk(fibers, debug)
 
   final def compose(services: ExposedService*): ULayer[DockerComposeContainer] =
     ZLayer.fromTestContainer {
@@ -29,9 +29,10 @@ trait IntegrationSpec extends ZIOSpecDefault {
   final def masterNodeConfig: URLayer[DockerComposeContainer, RedisClusterConfig] =
     ZLayer {
       for {
-        docker      <- ZIO.service[DockerComposeContainer]
-        hostAndPort <- docker.getHostAndPort(IntegrationSpec.MasterNode)(6379)
-        uri          = RedisUri(s"${hostAndPort._1}:${hostAndPort._2}")
+        docker       <- ZIO.service[DockerComposeContainer]
+        (host, port) <- docker.getHostAndPort(IntegrationSpec.MasterNode)(6379)
+        _            <- ZIO.logInfo(s"master node is known to be at $host:$port")
+        uri           = RedisUri(host, port, ssl = false, sni = None)
       } yield RedisClusterConfig(Chunk(uri))
     }
 

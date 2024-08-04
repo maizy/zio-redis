@@ -12,6 +12,7 @@ object Dependencies {
     val ZioJson           = "0.6.2"
     val ZioSchema         = "1.2.2"
     val ZioTestContainers = "0.5.0"
+    val ZioLogging        = "2.1.17"
   }
 
   lazy val Benchmarks =
@@ -53,6 +54,10 @@ object Dependencies {
       "dev.zio"                  %% "zio-schema-protobuf" % Versions.ZioSchema         % Test,
       "dev.zio"                  %% "zio-test"            % zioVersion                 % Test,
       "dev.zio"                  %% "zio-test-sbt"        % zioVersion                 % Test,
-      "com.github.sideeffffect"  %% "zio-testcontainers"  % Versions.ZioTestContainers % Test
+      "com.github.sideeffffect"  %% "zio-testcontainers"  % Versions.ZioTestContainers % Test,
+      "dev.zio"                  %% "zio-logging"         % Versions.ZioLogging        % Test,
+      "dev.zio"                  %% "zio-logging-slf4j"   % Versions.ZioLogging        % Test,
+      "ch.qos.logback"            % "logback-classic"     % "1.5.6"                    % Test,
+
     )
 }
