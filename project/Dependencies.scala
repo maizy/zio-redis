@@ -39,6 +39,12 @@ object Dependencies {
       "io.d11"                        %% "zhttp"               % Versions.ZHttp
     )
 
+  lazy val Example2 =
+    List(
+      "dev.zio"                       %% "zio-config-magnolia" % Versions.ZioConfig,
+      "dev.zio"                       %% "zio-config-typesafe" % Versions.ZioConfig,
+    )
+
   def docs(zioVersion: String) =
     List(
       "dev.zio" %% "zio-schema-protobuf" % Versions.ZioSchema,

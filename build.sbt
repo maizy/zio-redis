@@ -81,6 +81,17 @@ lazy val example =
       libraryDependencies ++= Dependencies.Example
     )
 
+lazy val example2 =
+  project
+    .in(file("modules/example2"))
+    .dependsOn(client)
+    .settings(stdSettings(name = Some("example2"), packageName = Some("zio.redis.example2")))
+    .settings(enableZIO(enableStreaming = true))
+    .settings(
+      publish / skip := true,
+      libraryDependencies ++= Dependencies.Example2
+    )
+
 lazy val integrationTest =
   project
     .in(file("modules/redis-it"))
